@@ -6,7 +6,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}\\bin\\Debug\\netcoreapp1.1\\CmdIntegration.dll",
+            "program": "${workspaceRoot}\\src\\GitIntegration\\bin\\Debug\\netcoreapp1.1\\GitIntegration.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "externalConsole": false,

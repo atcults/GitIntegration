@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}\\project.json"
+                "${workspaceRoot}\\src\\GitIntegration\\project.json"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
