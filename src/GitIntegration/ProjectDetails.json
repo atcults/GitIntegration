@@ -1,0 +1,14 @@
+{
+  "ToolsPath": "c:/Environment/tools",
+  "TempPath": "c:/temp",
+  "Projects": [
+    {
+      "Name": "jayhawk",
+      "Location": "c:/code/jayhawk"
+    },
+    {
+      "Name": "libcloud",
+      "Location": "c:/code/liibcloud"
+    }
+  ]
+}

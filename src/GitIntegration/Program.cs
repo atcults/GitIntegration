@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using NLog;
 
 namespace GitIntegration
 {
@@ -10,15 +12,24 @@ namespace GitIntegration
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Starting console");
-            var output = GitCommit.ListShaWithFiles("/code/jayhawk");
+            Console.WriteLine("Starting program");
 
-            foreach(var elm in output)
+            var configuration = ProjectConfigurationProvider.Instance;
+
+            var ProjectDetail = configuration.Projects[0];
+
+            LogHelper.AddLogger(ProjectDetail.Name);
+
+            var logger = LogManager.GetLogger(ProjectDetail.Name);
+
+            var output = GitParserHelper.ListShaWithFiles(ProjectDetail);
+
+            foreach (var elm in output)
             {
-                elm.Print();
+                logger.Info(elm.ToString());
             }
 
-            Console.ReadLine();
+            Console.WriteLine("Output generated");
 
         }
 
@@ -26,85 +37,30 @@ namespace GitIntegration
 
     public static class ProcessRunner
     {
-        public static string RunProcess(string command)
+        public static string RunProcess(string command, string args)
         {
             // Start the child process.
             Process p = new Process();
             // Redirect the output stream of the child process.
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "git";
-            p.StartInfo.Arguments = command;
+            p.StartInfo.FileName = command;
+            p.StartInfo.Arguments = args;
             p.Start();
             // Read the output stream first and then wait.
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
             return output;
-
-            /*
-            
-            ProcessStartInfo startInfo = new ProcessStartInfo()
-            {
-                FileName = "cmd",
-                Arguments = "/C git status > /code/output/log.txt",
-                WorkingDirectory = "/code/jayhawk"
-            };
-
-            Process proc = new Process() { StartInfo = startInfo, };
-            proc.Start();
-
-            proc.WaitForExit();
-            
-            */
         }
     }
 
     public static class GitParserHelper
     {
-        public static bool StartsWithHeader(string line)
+        public static List<GitCommit> ListShaWithFiles(ProjectDetail detail)
         {
-            if (line.Length > 0 && char.IsLetter(line[0]))
-            {
-                var seq = line.SkipWhile(ch => Char.IsLetter(ch) && ch != ':');
-                return seq.FirstOrDefault() == ':';
-            }
-            return false;
-        }
-    }
+            var path = detail.Location.Replace("\\", "/");
 
-    public class GitCommit
-    {
-        public GitCommit()
-        {
-            Headers = new Dictionary<string, string>();
-            Files = new List<GitFileStatus>();
-            Message = "";
-        }
-
-        public Dictionary<string, string> Headers { get; set; }
-        public string Sha { get; set; }
-        public string Message { get; set; }
-        public List<GitFileStatus> Files { get; set; }
-
-        public void Print()
-        {
-            Console.WriteLine("commit " + Sha);
-            foreach (var key in Headers.Keys)
-            {
-                Console.WriteLine(key + ":" + Headers[key]);
-            }
-            Console.WriteLine();
-            Console.WriteLine(Message);
-            Console.WriteLine();
-            foreach (var file in Files)
-            {
-                Console.WriteLine(file.Status + "\t" + file.File);
-            }
-        }
-
-        public static List<GitCommit> ListShaWithFiles(string path)
-        {
-            var output = ProcessRunner.RunProcess(string.Format(" --git-dir={0}/.git --work-tree={1} log --name-status", path.Replace("\\", "/"), path.Replace("\\", "/")));
+            var output = ProcessRunner.RunProcess("git", string.Format($" --git-dir={path}/.git --work-tree={path} log --name-status"));
 
             var commits = new List<GitCommit>();
             bool processingMessage = false;
@@ -155,6 +111,54 @@ namespace GitIntegration
 
             return commits;
         }
+
+        public static bool StartsWithHeader(string line)
+        {
+            if (line.Length > 0 && char.IsLetter(line[0]))
+            {
+                var seq = line.SkipWhile(ch => Char.IsLetter(ch) && ch != ':');
+                return seq.FirstOrDefault() == ':';
+            }
+            return false;
+        }
+    }
+
+    public class GitCommit
+    {
+        public GitCommit()
+        {
+            Headers = new Dictionary<string, string>();
+            Files = new List<GitFileStatus>();
+            Message = "";
+        }
+
+        public Dictionary<string, string> Headers { get; set; }
+        public string Sha { get; set; }
+        public string Message { get; set; }
+        public List<GitFileStatus> Files { get; set; }
+
+        public override string ToString()
+        {
+            var logString = new StringBuilder();
+
+            logString.AppendLine("commit " + Sha);
+
+            foreach (var key in Headers.Keys)
+            {
+                logString.AppendLine(key + ":" + Headers[key]);
+            }
+
+            logString.AppendLine(Message);
+
+            foreach (var file in Files)
+            {
+                logString.AppendLine(file.Status + "\t" + file.File);
+            }
+
+            return logString.ToString();
+        }
+
+
     }
 
     public class GitFileStatus
