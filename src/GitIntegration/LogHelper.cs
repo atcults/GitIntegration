@@ -33,14 +33,14 @@ namespace GitIntegration
             {
                 Encoding = Encoding.UTF8,
                 FileName = $"{configuration.TempPath}/Logs/{projectName}-{DateTime.Now.ToString("dd-MM-yyyy_hhmmss")}.txt",
-                Layout = "${date:format=HH\\:mm\\:ss} ${logger} ${event-context:item=Dev} [${level:uppercase=true}]\t${message}.  ${exception:format=ToString,StackTrace}"
+                Layout = "${date:format=HH\\:mm\\:ss} ${logger} ${event-context:item=Dev} [${level:uppercase=true}]\t${message}. ${exception:format=ToString,StackTrace}"
             };
 
             loggingConfiguration.AddTarget("file", fileTarget);
 
-            var loggingTarget = new AsyncTargetWrapper(fileTarget, 5000, AsyncTargetWrapperOverflowAction.Block);
+            var loggingTarget = new AsyncTargetWrapper(fileTarget, 5000, AsyncTargetWrapperOverflowAction.Grow);
 
-            loggingRule = new LoggingRule(projectName, LogLevel.Debug, loggingTarget);
+            loggingRule = new LoggingRule(projectName, LogLevel.Trace, loggingTarget);
 
             loggingConfiguration.LoggingRules.Add(loggingRule);
 

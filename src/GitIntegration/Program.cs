@@ -22,12 +22,18 @@ namespace GitIntegration
 
             var logger = LogManager.GetLogger(ProjectDetail.Name);
 
+            logger.Info("Starting Process");
+
             var output = GitParserHelper.ListShaWithFiles(ProjectDetail);
 
             foreach (var elm in output)
             {
                 logger.Info(elm.ToString());
+                Console.WriteLine(elm.ToString());
             }
+
+            LogManager.Flush();
+            LogManager.Shutdown();
 
             Console.WriteLine("Output generated");
 
