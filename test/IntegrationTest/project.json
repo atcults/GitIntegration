@@ -10,13 +10,13 @@
     "preserveCompilationContext": true
   },
   "dependencies": {
+    "GitIntegration": "*",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
-    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
     "xunit": "2.2.0-beta4-build3444",
     "dotnet-test-xunit": "2.2.0-preview2-build1029"
   },
