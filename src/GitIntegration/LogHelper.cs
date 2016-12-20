@@ -10,7 +10,6 @@ namespace GitIntegration
 {
     public class LogHelper
     {
-
         public static void AddLogger(string projectName)
         {
             var configuration = ProjectConfigurationProvider.Instance;
