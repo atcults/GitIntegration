@@ -27,10 +27,7 @@ namespace IntegrationTest
         {
             var gitProcessor = GitProcessor.GetProcessorForPath(RepositoryLocation);
 
-            foreach (var elm in gitProcessor.Logs)
-            {
-                Logger.Info(elm.ToString());
-            }
+            Assert.False(gitProcessor.HasReceivedIncomingChanges);
         }
     }
 }

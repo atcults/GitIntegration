@@ -62,11 +62,11 @@ namespace GitIntegration
             }
         }
 
-        public bool HasGotIncomingChanges
+        public bool HasReceivedIncomingChanges
         {
             get
             {
-                return !String.IsNullOrWhiteSpace(RunCommand("pull"));
+                return !RunCommand("pull").StartsWith("Already up-to-date.");
             }
         }
 
