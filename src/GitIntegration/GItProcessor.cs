@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using GitIntegration.Model;
 
 //Reference: http://blog.somewhatabstract.com/2015/06/22/getting-information-about-your-git-repository-with-c/
 
 namespace GitIntegration
 {
-    class GitProcessor : IDisposable
+    public class GitProcessor : IDisposable
     {
         public static GitProcessor GetProcessorForPath(string path, string gitPath = null)
         {
@@ -61,21 +62,75 @@ namespace GitIntegration
             }
         }
 
-        public IEnumerable<string> Log
+        public bool HasGotIncomingChanges
         {
             get
             {
+                return !String.IsNullOrWhiteSpace(RunCommand("pull"));
+            }
+        }
+
+        public IEnumerable<GitCommit> Logs
+        {
+            get
+            {
+                GitCommit commit = null;
+                        
                 int skip = 0;
                 while (true)
                 {
-                    //string entry = RunCommand(String.Format("log --skip={0} -n1", skip++));
-                    string entry = RunCommand(String.Format("log --skip={0} --name-status", skip++));
+                    string entry = RunCommand(String.Format("log --skip={0} -n1 --name-status", skip++));
                     if (String.IsNullOrWhiteSpace(entry))
                     {
                         yield break;
                     }
 
-                    yield return entry;
+                    bool processingMessage = false;
+                    using (var strReader = new StringReader(entry))
+                    {
+                        do
+                        {
+                            var line = strReader.ReadLine();
+
+                            if (line.StartsWith("commit "))
+                            {
+                                commit = new GitCommit();
+                                commit.Sha = line.Split(' ')[1];
+
+                            }
+
+                            if (StartsWithHeader(line))
+                            {
+                                var header = line.Split(':')[0];
+                                var val = string.Join(":", line.Split(':').Skip(1)).Trim();
+
+                                // headers
+                                commit.Headers.Add(header, val);
+                            }
+
+                            if (string.IsNullOrEmpty(line))
+                            {
+                                // commit message divider
+                                processingMessage = !processingMessage;
+                            }
+
+                            if (line.Length > 0 && (line[0] == '\t' || line.StartsWith("  ")))
+                            {
+                                // commit message.
+                                commit.Message += line;
+                            }
+
+                            if (line.Length > 1 && char.IsLetter(line[0]) && line[1] == '\t')
+                            {
+                                var status = line.Split('\t')[0];
+                                var file = line.Split('\t')[1];
+                                commit.Files.Add(new GitFileStatus() { Status = status, File = file });
+                            }
+                        }
+                        while (strReader.Peek() != -1);
+                    }
+
+                    yield return commit;
                 }
             }
         }

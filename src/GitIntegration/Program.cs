@@ -9,17 +9,13 @@ namespace GitIntegration
         {
             Console.WriteLine("Starting program");
 
-            var configuration = ProjectConfigurationProvider.Instance;
+            LogHelper.AddLogger("Program");
 
-            var ProjectDetail = configuration.Projects[0];
-
-            LogHelper.AddLogger(ProjectDetail.Name);
-
-            var logger = LogManager.GetLogger(ProjectDetail.Name);
+            var logger = LogManager.GetLogger("Program");
 
             logger.Info("Starting Process");
 
-            var output = GitParser.ListShaWithFiles(ProjectDetail);
+            var output = GitParser.ListShaWithFiles("c:\\code\\GitIntegration");
 
             foreach (var elm in output)
             {

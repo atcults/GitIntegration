@@ -2,11 +2,6 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "copyToOutput": {
-      "includeFiles": [
-        "ProjectDetails.json"
-      ]
-    },
     "preserveCompilationContext": true
   },
   "dependencies": {

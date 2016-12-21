@@ -7,9 +7,9 @@ namespace GitIntegration
 {
     public static class GitParser
     {
-        public static List<GitCommit> ListShaWithFiles(ProjectDetail detail)
+        public static List<GitCommit> ListShaWithFiles(string path)
         {
-            var path = detail.Location.Replace("\\", "/");
+            path = path.Replace("\\", "/");
 
             var output = ProcessRunner.RunProcess("git", string.Format($" --git-dir={path}/.git --work-tree={path} log --name-status"));
 

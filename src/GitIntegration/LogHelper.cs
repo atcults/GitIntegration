@@ -12,8 +12,6 @@ namespace GitIntegration
     {
         public static void AddLogger(string projectName)
         {
-            var configuration = ProjectConfigurationProvider.Instance;
-
             if (LogManager.Configuration == null)
             {
                 LogManager.Configuration = new LoggingConfiguration();
@@ -31,7 +29,7 @@ namespace GitIntegration
             var fileTarget = new FileTarget
             {
                 Encoding = Encoding.UTF8,
-                FileName = $"{configuration.TempPath}/Logs/{projectName}-{DateTime.Now.ToString("dd-MM-yyyy_hhmmss")}.txt",
+                FileName = $"c:/temp/Logs/{projectName}-{DateTime.Now.ToString("dd-MM-yyyy_hhmmss")}.txt",
                 Layout = "${date:format=HH\\:mm\\:ss} ${logger} ${event-context:item=Dev} [${level:uppercase=true}]\t${message}. ${exception:format=ToString,StackTrace}"
             };
 
