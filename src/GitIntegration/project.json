@@ -2,8 +2,7 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "emitEntryPoint": true,
-    "copyToOutput": { "includeFiles": [ "ProjectDetails.json" ] }
+    "emitEntryPoint": true
   },
   "dependencies": {
     "Microsoft.Extensions.Configuration": "1.1.0",
