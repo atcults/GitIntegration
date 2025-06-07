@@ -66,7 +66,18 @@ namespace GitIntegration
         {
             get
             {
-                return !RunCommand("pull").StartsWith("Already up-to-date.");
+                var result = RunCommand("pull");
+                if (string.IsNullOrWhiteSpace(result))
+                {
+                    return false;
+                }
+                if (result.StartsWith("There is no tracking information") ||
+                    result.StartsWith("fatal") ||
+                    result.StartsWith("error"))
+                {
+                    return false;
+                }
+                return !result.StartsWith("Already up-to-date.");
             }
         }
 
@@ -147,7 +158,7 @@ namespace GitIntegration
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                FileName = Directory.Exists(gitPath) ? gitPath : "git.exe",
+                FileName = string.IsNullOrWhiteSpace(gitPath) ? "git" : gitPath,
                 CreateNoWindow = true,
                 WorkingDirectory = path
             };
@@ -177,6 +188,7 @@ namespace GitIntegration
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 FileName = _processInfo.FileName,
                 CreateNoWindow = true,
                 WorkingDirectory = _processInfo.WorkingDirectory,
@@ -186,7 +198,9 @@ namespace GitIntegration
             using (var process = new Process { StartInfo = psi })
             {
                 process.Start();
-                string output = process.StandardOutput.ReadToEnd().Trim();
+                string output = process.StandardOutput.ReadToEnd();
+                output += process.StandardError.ReadToEnd();
+                output = output.Trim();
                 process.WaitForExit();
                 return output;
             }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using GitIntegration;
 using GitIntegration.Extensions;
 using NLog;
@@ -72,7 +73,9 @@ namespace IntegrationTest
         {
             get
             {
-                return "c:/code/GitIntegration";
+                string baseDir = AppContext.BaseDirectory;
+                var root = Path.GetFullPath(Path.Combine(baseDir, "../../../../.."));
+                return root;
             }
         }
     }
