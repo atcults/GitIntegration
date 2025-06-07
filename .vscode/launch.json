@@ -2,22 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": ".NET Launch",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}\\src\\GitIntegration\\bin\\Debug\\netcoreapp1.1\\GitIntegration.dll",
+            "program": "${workspaceRoot}/src/GitIntegration/bin/Debug/net8.0/GitIntegration.dll",
             "args": [],
-            "cwd": "${workspaceRoot}\\src\\GitIntegration\\bin\\Debug\\netcoreapp1.1",
-            "externalConsole": false,
+            "cwd": "${workspaceRoot}/src/GitIntegration/bin/Debug/net8.0",
             "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
+            "console": "internalConsole"
         },
         {
-            "name": ".NET Core Attach",
+            "name": ".NET Attach",
             "type": "coreclr",
             "request": "attach",
-            "processId": "${command.pickProcess}"
+            "processId": "${command:pickProcess}"
         }
     ]
 }
