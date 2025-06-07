@@ -137,16 +137,13 @@ namespace GitIntegration
 
         public void Dispose()
         {
-            if (!_disposed)
-            {
-                _disposed = true;
-                _gitProcess.Dispose();
-            }
+            // Nothing to dispose for now. Method kept for backward
+            // compatibility with the IDisposable interface.
         }
 
         private GitProcessor(string path, string gitPath)
         {
-            var processInfo = new ProcessStartInfo
+            _processInfo = new ProcessStartInfo
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -154,9 +151,6 @@ namespace GitIntegration
                 CreateNoWindow = true,
                 WorkingDirectory = path
             };
-
-            _gitProcess = new Process();
-            _gitProcess.StartInfo = processInfo;
         }
 
         private bool IsGitRepository
@@ -179,14 +173,25 @@ namespace GitIntegration
 
         private string RunCommand(string args)
         {
-            _gitProcess.StartInfo.Arguments = args;
-            _gitProcess.Start();
-            string output = _gitProcess.StandardOutput.ReadToEnd().Trim();
-            _gitProcess.WaitForExit();
-            return output;
+            var psi = new ProcessStartInfo
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                FileName = _processInfo.FileName,
+                CreateNoWindow = true,
+                WorkingDirectory = _processInfo.WorkingDirectory,
+                Arguments = args
+            };
+
+            using (var process = new Process { StartInfo = psi })
+            {
+                process.Start();
+                string output = process.StandardOutput.ReadToEnd().Trim();
+                process.WaitForExit();
+                return output;
+            }
         }
 
-        private bool _disposed;
-        private readonly Process _gitProcess;
+        private readonly ProcessStartInfo _processInfo;
     }
 }
