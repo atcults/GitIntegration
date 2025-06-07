@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1EACD584-7B49-4E8F-91E0-3E215D548025}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitIntegration", "src\GitIntegration\GitIntegration.csproj", "{E275B66B-D191-4058-BEC4-6F82BFB02313}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{F8282B0E-194C-4A0A-BF08-A7091231BF8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTest", "test\IntegrationTest\IntegrationTest.csproj", "{B4610661-4BDB-4BD3-A614-E49B50995FCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E275B66B-D191-4058-BEC4-6F82BFB02313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E275B66B-D191-4058-BEC4-6F82BFB02313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E275B66B-D191-4058-BEC4-6F82BFB02313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E275B66B-D191-4058-BEC4-6F82BFB02313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4610661-4BDB-4BD3-A614-E49B50995FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4610661-4BDB-4BD3-A614-E49B50995FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4610661-4BDB-4BD3-A614-E49B50995FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4610661-4BDB-4BD3-A614-E49B50995FCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E275B66B-D191-4058-BEC4-6F82BFB02313} = {1EACD584-7B49-4E8F-91E0-3E215D548025}
+		{B4610661-4BDB-4BD3-A614-E49B50995FCA} = {F8282B0E-194C-4A0A-BF08-A7091231BF8E}
+	EndGlobalSection
+EndGlobal
