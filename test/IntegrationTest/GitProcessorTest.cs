@@ -1,4 +1,5 @@
 ﻿using GitIntegration;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace IntegrationTest

@@ -9,12 +9,12 @@ namespace IntegrationTest
 {
     public class UnitTestCore : IDisposable
     {
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILoggerFactory _logFactory;
 
         public UnitTestCore()
         {
             Console.WriteLine("Starting UnitTests");
-            _loggerFactory = LoggerFactory.Create(builder =>
+            _logFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
             {
                 builder.AddSimpleConsole(options =>
                 {
@@ -25,11 +25,11 @@ namespace IntegrationTest
 
         public void Dispose()
         {
-            _loggerFactory.Dispose();
+            _logFactory.Dispose();
             Console.WriteLine("Disposing UnitTests");
         }
 
-        public ILoggerFactory LoggerFactory => _loggerFactory;
+        public ILoggerFactory LogFactory => _logFactory;
     }
 
     [CollectionDefinition("UnitTest")]
@@ -70,7 +70,7 @@ namespace IntegrationTest
             SystemTime.Now = () => DateTime.Now;
         }
 
-        protected ILogger Logger => _fixture.LoggerFactory.CreateLogger("IntegrationTest");
+        protected ILogger Logger => _fixture.LogFactory.CreateLogger("IntegrationTest");
 
         protected string RepositoryLocation
         {
