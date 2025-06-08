@@ -16,7 +16,7 @@ namespace IntegrationTest
 
             foreach (var elm in output)
             {
-                Logger.Info(elm.ToString());
+                Logger.LogInformation(elm.ToString());
             }
 
             Assert.True(output.Count > 0);
