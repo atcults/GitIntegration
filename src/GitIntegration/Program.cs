@@ -1,5 +1,6 @@
 ﻿using System;
 using NLog;
+using System.Text.Json;
 
 namespace GitIntegration
 {
@@ -19,8 +20,9 @@ namespace GitIntegration
 
             foreach (var elm in output)
             {
-                logger.Info(elm.ToString());
-                Console.WriteLine(elm.ToString());
+                var json = JsonSerializer.Serialize(elm, new JsonSerializerOptions { WriteIndented = true });
+                logger.Info(json);
+                Console.WriteLine(json);
             }
 
             LogManager.Flush();

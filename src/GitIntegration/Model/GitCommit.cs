@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace GitIntegration.Model
 {
@@ -36,6 +37,11 @@ namespace GitIntegration.Model
             }
 
             return outString.ToString();
+        }
+
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
         }
     }
 }
