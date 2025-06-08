@@ -1,5 +1,5 @@
-﻿using System;
-using NLog;
+using System;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace GitIntegration
@@ -10,26 +10,27 @@ namespace GitIntegration
         {
             Console.WriteLine("Starting program");
 
-            LogHelper.AddLogger("Program");
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSimpleConsole(options =>
+                {
+                    options.TimestampFormat = "HH:mm:ss ";
+                });
+            });
+            var logger = loggerFactory.CreateLogger("Program");
 
-            var logger = LogManager.GetLogger("Program");
-
-            logger.Info("Starting Process");
+            logger.LogInformation("Starting Process");
 
             var output = GitParser.ListShaWithFiles("c:\\code\\GitIntegration");
 
             foreach (var elm in output)
             {
                 var json = JsonSerializer.Serialize(elm, new JsonSerializerOptions { WriteIndented = true });
-                logger.Info(json);
+                logger.LogInformation(json);
                 Console.WriteLine(json);
             }
 
-            LogManager.Flush();
-            LogManager.Shutdown();
-
             Console.WriteLine("Output generated");
-
         }
     }
 }

@@ -17,7 +17,7 @@ namespace IntegrationTest
 
             foreach (var elm in gitProcessor.Logs)
             {
-                Logger.Info(elm.ToString());
+                Logger.LogInformation(elm.ToString());
             }
             
         }

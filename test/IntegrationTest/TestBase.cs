@@ -2,25 +2,34 @@ using System;
 using System.IO;
 using GitIntegration;
 using GitIntegration.Extensions;
-using NLog;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace IntegrationTest
 {
     public class UnitTestCore : IDisposable
     {
+        private readonly ILoggerFactory _loggerFactory;
+
         public UnitTestCore()
         {
             Console.WriteLine("Starting UnitTests");
-            LogHelper.AddLogger("IntegrationTest");
+            _loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSimpleConsole(options =>
+                {
+                    options.TimestampFormat = "HH:mm:ss ";
+                });
+            });
         }
 
         public void Dispose()
         {
-            LogManager.Flush();
-            LogManager.Shutdown();
+            _loggerFactory.Dispose();
             Console.WriteLine("Disposing UnitTests");
         }
+
+        public ILoggerFactory LoggerFactory => _loggerFactory;
     }
 
     [CollectionDefinition("UnitTest")]
@@ -61,13 +70,7 @@ namespace IntegrationTest
             SystemTime.Now = () => DateTime.Now;
         }
 
-        protected ILogger Logger
-        {
-            get
-            {
-                return LogManager.GetLogger("IntegrationTest");
-            }
-        }
+        protected ILogger Logger => _fixture.LoggerFactory.CreateLogger("IntegrationTest");
 
         protected string RepositoryLocation
         {

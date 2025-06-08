@@ -23,7 +23,7 @@ You can execute the console application from the `src/GitIntegration` directory:
 dotnet run --project src/GitIntegration
 ```
 
-The program enumerates commits in the target repository and writes the output to both the console and log files under `c:/temp/Logs`.
+The program enumerates commits in the target repository and writes the output to the console using the built-in logging framework.
 
 ## Tests
 
